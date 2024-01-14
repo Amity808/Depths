@@ -11,7 +11,7 @@ const Navbar = () => {
         </div>
         <div className=' flex'>
             <div>
-                <li className=' list-none flex gap-14 items-center text-white'>
+                <li className=' list-none flex gap-14 items-center text-white lg:flex md:hidden max-sm:hidden sm:hidden'>
                     <ul>Home</ul>
                     <ul>Service</ul>
                     <ul>Features</ul>
