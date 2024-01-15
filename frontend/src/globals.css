@@ -6,6 +6,8 @@
 
 body {
   background-color: #0A2342;
+  margin: 0%;
+  padding: 0%;
 }
 
 .savemoney {
@@ -16,3 +18,33 @@ body {
   font-weight: 400;
   line-height: 30px; /* 166.667% */
 }
+
+.service {
+  color: #FFF;
+  text-align: center;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-family: DM Sans;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 63.984px; /* 133.3% */
+}
+
+.ourservice {
+  border-radius: 30px;
+  background: rgba(102, 195, 255, 0.30);
+  mix-blend-mode: luminosity;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  width: 371px;
+  height: 353px;
+  flex-shrink: 0;
+}
+.why {
+  color: var(--Text-White, #FFF);
+  text-align: center;
+  font-family: Poppins;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px; /* 150% */
+  }
