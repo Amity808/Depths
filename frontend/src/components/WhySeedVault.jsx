@@ -1,4 +1,5 @@
 import React from 'react'
+import Diagram from './Diagram'
 
 const WhySeedVault = () => {
   return (
@@ -17,6 +18,7 @@ const WhySeedVault = () => {
         <div>
             <img src={"./whycircle.svg"} alt="circle" className=' float-end max-sm:w-[20%] ' />
         </div>
+        <Diagram />
     </div>
   )
 }
