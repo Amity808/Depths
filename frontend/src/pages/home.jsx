@@ -3,6 +3,8 @@ import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import OurService from '@/components/OurService'
 import WhySeedVault from '@/components/WhySeedVault'
+import FAQ from '@/components/FAQ'
+import Footer from '@/components/Footer'
 
 export default function Home() {
   return (
@@ -14,7 +16,9 @@ export default function Home() {
         <Hero />
       
       <OurService />
-      <WhySeedVault />
+      {/* <WhySeedVault /> */}
+      <FAQ />
+      <Footer />
     </main>
   )
 }
