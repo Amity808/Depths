@@ -42,7 +42,7 @@ const OurService = () => {
         </div>
         <div className=" flex justify-center item-center gap-[61px] max-sm:flex-col">
             {data.map((item) => (
-                <ServiceCard data={item} />
+                <ServiceCard data={item} key={item} />
             ))}
         </div>
     </div>
