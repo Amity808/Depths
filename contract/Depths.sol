@@ -71,11 +71,11 @@ contract SocialFia is AccessControl {
         newMemberInfo.bio = _bio;
     }
 
-    function deleteMember( uint256 index) public onlyMember(index) {
+    function deleteMember( uint256 index) public onlyMember(index) onlyAdmin {
         delete _newMember[index];
     }
 
-    function newPost(string memory _title, string memory _description) public onlyRegisterMember {
+    function newPost(string memory _title, string memory _description) public  {
         Post storage newUserPost = _post[postId];
         newUserPost.title = _title;
         newUserPost.description = _description;
@@ -86,9 +86,8 @@ contract SocialFia is AccessControl {
         postId++;
     }
 
-    function likePost(uint256 _postId) external onlyRegisterMember {
+    function likePost(uint256 _postId) external  {
         require(!hasLiked[_postId][msg.sender], "You have already liked this post");
-        // If the user has previously disliked the post, decrement unlikes and allow them to like
         if(hasDisliked[_postId][msg.sender]) {
             _post[_postId].unlikes--;
             hasDisliked[_postId][msg.sender] = false;
@@ -98,9 +97,8 @@ contract SocialFia is AccessControl {
         hasLiked[_postId][msg.sender] = true;
     }
 
-    function unLikePost(uint256 _postId) external onlyRegisterMember {
+    function unLikePost(uint256 _postId) external  {
         require(!hasDisliked[_postId][msg.sender], "You have already disliked this post");
-         // If the user has previously liked the post, decrement likes and allow them to dislike
         if(hasLiked[_postId][msg.sender]) {
             _post[_postId].likes--;
             hasLiked[_postId][msg.sender] = false;
@@ -108,6 +106,21 @@ contract SocialFia is AccessControl {
         _post[_postId].unlikes++;
         hasDisliked[_postId][msg.sender] = true;
     }
+
+    function comentPost(uint256 _postId, string memory _comment) external  {
+        _post[_postId].comments.push(_comment);
+    }
+
+    function getComments(uint256 _postId) public view returns (string memory) {
+    Post storage post = _post[_postId];
+    uint256 numComments = post.comments.length;
+    string memory allComments = "";
+    for (uint256 i = 0; i < numComments; i++) {
+        allComments = string(abi.encodePacked(allComments, post.comments[i], "\n"));
+    }
+    return allComments;
+}
+
 
 
 
