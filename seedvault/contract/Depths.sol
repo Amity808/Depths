@@ -9,6 +9,7 @@ contract SocialFia is AccessControl {
 
     uint256 postId;
     uint256 memberId;
+    uint256 totalBalance;
 
     struct NewMember {
         string name;
@@ -28,7 +29,7 @@ contract SocialFia is AccessControl {
 
     event PostCreation (string name, string description, address payable owner, uint256 likes, uint256 unlikes);
 
-    mapping(uint256 => Post) private _post;
+    mapping(uint256 => Post) public _post;
     mapping(bytes32 => bool) public _ordersSignatures; // Changed key type to bytes32
     mapping (uint256 => NewMember) public _newMember;
 
@@ -65,7 +66,7 @@ contract SocialFia is AccessControl {
         _newMember[memberId] = NewMember(_name, _bio, payable (msg.sender));
     }
 
-    function editBio( uint256 index, string memory _bio) public onlyMember(index) {
+    function editBio(uint256 index, string memory _bio) public onlyMember(index) {
         
         NewMember storage newMemberInfo = _newMember[index];
         newMemberInfo.bio = _bio;
@@ -75,7 +76,7 @@ contract SocialFia is AccessControl {
         delete _newMember[index];
     }
 
-    function newPost(string memory _title, string memory _description) public  {
+    function newPost(string memory _title, string memory _description) public   {
         Post storage newUserPost = _post[postId];
         newUserPost.title = _title;
         newUserPost.description = _description;
@@ -86,7 +87,7 @@ contract SocialFia is AccessControl {
         postId++;
     }
 
-    function likePost(uint256 _postId) external  {
+    function likePost(uint256 _postId) external onlyRegisterMember {
         require(!hasLiked[_postId][msg.sender], "You have already liked this post");
         if(hasDisliked[_postId][msg.sender]) {
             _post[_postId].unlikes--;
@@ -107,7 +108,7 @@ contract SocialFia is AccessControl {
         hasDisliked[_postId][msg.sender] = true;
     }
 
-    function comentPost(uint256 _postId, string memory _comment) external  {
+    function comentPost(uint256 _postId, string memory _comment) external   {
         _post[_postId].comments.push(_comment);
     }
 
@@ -121,7 +122,20 @@ contract SocialFia is AccessControl {
     return allComments;
 }
 
+// rewards
 
+function deposit(uint256 _postId) public payable {
+    Post storage post = _post[_postId];
+    post.tokenAmount = msg.value;
+    totalBalance += msg.value; // Add deposited ETH to user's balance
+}
+
+function rewards(uint256 _postId) external  {
+    Post storage post = _post[_postId];
+    uint256 fee = 0.00044 ether;
+    post.owner.transfer(fee);
+
+}
 
 
 }
