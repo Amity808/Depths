@@ -49,3 +49,11 @@ body {
   font-weight: 400;
   line-height: 27px; /* 150% */
   }
+
+  .smalltin {
+    width: 12px;
+    height: 58px;
+    border-radius: 0px 16px 16px 0px;
+    /* background: rgba(83, 216, 251, 0.80); */
+    flex-shrink: 0;
+  }
