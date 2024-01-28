@@ -30,7 +30,6 @@ contract SocialFia is AccessControl {
     event PostCreation (string name, string description, address payable owner, uint256 likes, uint256 unlikes);
 
     mapping(uint256 => Post) public _post;
-    mapping(bytes32 => bool) public _ordersSignatures; // Changed key type to bytes32
     mapping (uint256 => NewMember) public _newMember;
 
     mapping(uint256 => mapping(address => bool)) public hasLiked;
@@ -66,7 +65,7 @@ contract SocialFia is AccessControl {
         _newMember[memberId] = NewMember(_name, _bio, payable (msg.sender));
     }
 
-    function editBio(uint256 index, string memory _bio) public onlyMember(index) {
+    function editBio(uint256 index, string memory _bio) public onlyMember(index)  {
         
         NewMember storage newMemberInfo = _newMember[index];
         newMemberInfo.bio = _bio;
@@ -76,7 +75,7 @@ contract SocialFia is AccessControl {
         delete _newMember[index];
     }
 
-    function newPost(string memory _title, string memory _description) public   {
+    function newPost(string memory _title, string memory _description) public onlyRegisterMember  {
         Post storage newUserPost = _post[postId];
         newUserPost.title = _title;
         newUserPost.description = _description;
@@ -88,6 +87,7 @@ contract SocialFia is AccessControl {
     }
 
     function likePost(uint256 _postId) external onlyRegisterMember {
+        require(_postId <= postId,"invalid post Id");
         require(!hasLiked[_postId][msg.sender], "You have already liked this post");
         if(hasDisliked[_postId][msg.sender]) {
             _post[_postId].unlikes--;
@@ -98,7 +98,8 @@ contract SocialFia is AccessControl {
         hasLiked[_postId][msg.sender] = true;
     }
 
-    function unLikePost(uint256 _postId) external  {
+    function unLikePost(uint256 _postId) external onlyRegisterMember  {
+        require(_postId <= postId,"invalid post Id");
         require(!hasDisliked[_postId][msg.sender], "You have already disliked this post");
         if(hasLiked[_postId][msg.sender]) {
             _post[_postId].likes--;
@@ -108,32 +109,38 @@ contract SocialFia is AccessControl {
         hasDisliked[_postId][msg.sender] = true;
     }
 
-    function comentPost(uint256 _postId, string memory _comment) external   {
+    function comentPost(uint256 _postId, string memory _comment) external  {
+        require(_postId <= postId,"invalid post Id");
         _post[_postId].comments.push(_comment);
     }
 
     function getComments(uint256 _postId) public view returns (string memory) {
-    Post storage post = _post[_postId];
-    uint256 numComments = post.comments.length;
-    string memory allComments = "";
-    for (uint256 i = 0; i < numComments; i++) {
-        allComments = string(abi.encodePacked(allComments, post.comments[i], "\n"));
-    }
-    return allComments;
+        require(_postId <= postId,"invalid post Id");
+        Post storage post = _post[_postId];
+        uint256 numComments = post.comments.length;
+        string memory allComments = "";
+        for (uint256 i = 0; i < numComments; i++) {
+            allComments = string(abi.encodePacked(allComments, post.comments[i], "\n"));
+        }
+        return allComments;
 }
 
 // rewards
 
-function deposit(uint256 _postId) public payable {
+function deposit(uint256 _postId) public payable onlyRegisterMember {
+    require(_postId <= postId,"invalid post Id");
     Post storage post = _post[_postId];
     post.tokenAmount = msg.value;
-    totalBalance += msg.value; // Add deposited ETH to user's balance
+    totalBalance += msg.value;
 }
 
-function rewards(uint256 _postId) external  {
+function rewards(uint256 _postId) external onlyRegisterMember  {
+    require(_postId <= postId,"invalid post Id");
     Post storage post = _post[_postId];
-    uint256 fee = 0.00044 ether;
-    post.owner.transfer(fee);
+    uint256 fee = 0.00044 ether; // 1 dollar
+    // post.owner.transfer(fee);
+    bool success = post.owner.send(fee);
+    require(success, "Transfer failed");
 
 }
 
