@@ -19,25 +19,17 @@ const Sidebar = () => {
 
   const headerStyle = {
     backgroundImage: `url(${backgroundd.src})`,
-    /* Additional styles can be added here */
+    
 
-    // Set background size to cover the container by default
     backgroundSize: "cover",
-
-    // Center the background image by default
     backgroundPosition: "center",
 
     // Media query for mobile devices
     "@media (maxWidth: 768px)": {
-      backgroundSize: "auto", // Adjust background size for smaller screens
-      backgroundPosition: "center", // You can adjust this as needed
+      backgroundSize: "auto", 
+      backgroundPosition: "center", 
     },
-    // display: 'flex',
-    // flexDirection: "column",
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // height: '100vh',
-    // width: '100vw',
+
   };
   return (
     <div className=" h-screen">
