@@ -161,27 +161,29 @@ const Dasboard = () => {
             </div>
 
             <div className=" mt-[10px] text-white flex justify-center items-center text-[15px] font-bold gap-5">
+              <a href="/profile">
               <div
                 className={`smalltin ${
                   activeMenu === "profile" ? "bg-[#44b4d6]" : "bg-[#0A2342]"
                 }`}
-              ></div>
+                ></div>
               <span
                 className={` flex gap-4 ${
                   activeMenu === "profile" ? "bg-[#44b4d6]" : "bg-[#0A2342]"
                 } w-[207px] h-[64px] justify-center items-center rounded-md`}
                 onClick={() => {
-                    setActiveMenu("profile");
-                    localStorage.setItem("activeMenu", "profile");
-                  }}
-              >
+                  setActiveMenu("profile");
+                  localStorage.setItem("activeMenu", "profile");
+                }}
+                >
                 <img
                   src={"./profile.svg"}
                   alt="icon"
                   className=" w-[25px] h-[25px] mr-[20px]"
-                />
+                  />
                 <p>Profile</p>
               </span>
+                  </a>
             </div>
 
             <div className=" mt-[10px] text-white flex justify-center items-center text-[15px] font-bold gap-5">
